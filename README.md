@@ -185,6 +185,10 @@ exctrl.bind(app)
       .mount(controller);
 ```
 
+## Versioning
+
+`exctrl` uses [Semantic Versioning](http://semver.org/) as versioning model.
+
 ## Contribution
 
 Please feel free to contribute and send pull requests!
