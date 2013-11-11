@@ -30,6 +30,7 @@ var MAGIC_ACTIONS = {
  */
 exports.bind = function (app) {
   this.app = app;
+  return this;
 };
 
 /**
@@ -63,6 +64,8 @@ exports.load = function (app, options) {
 
     self.mount(mountPoint, controller);
   });
+
+  return this;
 };
 
 /**
@@ -76,8 +79,12 @@ exports.mount = function (name, controller) {
     throw new Error('An Express.js app must be bound to exctrl before mounting a controller!');
   }
 
-  if (typeof name === 'object' && typeof name.name === 'string') {
+  if (typeof name === 'object' && typeof controller === 'undefined') {
     controller = name;
+    name = null;
+  }
+
+  if (typeof controller.name === 'string') {
     name = controller.name;
   }
 
@@ -142,6 +149,8 @@ exports.mount = function (name, controller) {
         .concat(route.handler.bind(controller))
       );
   });
+
+  return this;
 };
 
 /**

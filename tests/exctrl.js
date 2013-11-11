@@ -50,6 +50,17 @@ describe('exctrl', function () {
       expect(mockApp.routes[0].url).to.equal('/user');
     });
 
+    it('should use controller.name as mount point even though a name is given', function () {
+      var controller = {
+        name: 'super-user',
+        get: function () {}
+      };
+      exctrl.bind(mockApp);
+      exctrl.mount('user', controller);
+      expect(mockApp.routes).to.have.length(1);
+      expect(mockApp.routes[0].url).to.equal('/super-user');
+    });
+
     it('should use given name as mount point', function () {
       var controller = {
         get: function () {}
@@ -303,6 +314,13 @@ describe('exctrl', function () {
     it('should be able to extract controller name from filename via provided regexp', function () {
       exctrl.bind(mockApp);
       exctrl.load({pattern: __dirname + '/other_controllers/*.js', nameRegExp: /([^\/\\]+).ctrl.js$/, prefix: 'api'});
+      expect(mockApp.routes).to.have.length(1);
+      expect(mockApp.routes[0].url).to.equal('/api');
+    });
+
+    it('should be able to nest `bind` and `load`', function () {
+      exctrl.bind(mockApp)
+            .load({pattern: __dirname + '/other_controllers/*.js', nameRegExp: /([^\/\\]+).ctrl.js$/, prefix: 'api'});
       expect(mockApp.routes).to.have.length(1);
       expect(mockApp.routes[0].url).to.equal('/api');
     });
