@@ -13,6 +13,8 @@ npm install exctrl
 
 ## Usage
 
+File `app.js`:
+
 ```javascript
 var express = require('express'),
     app = express(),
@@ -21,9 +23,40 @@ var express = require('express'),
 // configuring express app...
 
 exctrl.load(app, {pattern: __dirname + '/controllers/*.js'});
-
-// Done...
 ```
+
+File `/controllers/user.js`:
+
+```javascript
+exports.create = function (req, res) {
+  // ...
+  res.send('user created');
+};
+exports.read = function (req, res) {
+  // ...
+  res.send('user read');
+};
+exports.update = function (req, res) {
+  // ...
+  res.send('user updated');
+};
+exports.del = function (req, res) {
+  // ...
+  res.send('user deleted');
+};
+exports.index = function (req, res) {
+  // ...
+  res.send('all users');
+};
+```
+
+Results in:
+
+    POST /user
+    GET /user/:id
+    PUT /user/:id
+    DELETE /user/:id
+    GET /user
 
 ## Generated URLs/routes
 
