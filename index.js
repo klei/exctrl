@@ -10,13 +10,13 @@ var glob = require('glob'),
  * CONSTANTS
  */
 var MAGIC_ACTIONS = {
-      "create": {method: "post", args: null},
-      "read": {method: "get", args: [":id"]},
-      "update": {method: "put", args: [":id"]},
-      "del": {method: "delete", args: [":id"]},
-      "search": {method: "get", args: null},
-      "index": {method: "get", args: null},
-      "list": {method: "get", args: null}
+      'create': {method: 'post', args: null},
+      'read': {method: 'get', args: [':id']},
+      'update': {method: 'put', args: [':id']},
+      'del': {method: 'delete', args: [':id']},
+      'search': {method: 'get', args: null},
+      'index': {method: 'get', args: null},
+      'list': {method: 'get', args: null}
     };
 
 /**
@@ -53,7 +53,7 @@ exports.load = function (app, options) {
   options = options || {};
 
   if (!options.pattern) {
-    throw new Error('You must specify a controller matching pattern! E.g. "controllers/*.js"');
+    throw new Error('You must specify a controller matching pattern! E.g. \'controllers/*.js\'');
   }
 
   // Make this sync because we want this to be executed where we intend:
@@ -98,7 +98,7 @@ exports.mount = function (name, controller) {
 
     var magic = MAGIC_ACTIONS[action] || {},
           route = {
-            method: magic.method || getMethod(action) || "get",
+            method: magic.method || getMethod(action) || 'get',
             url: [],
             args: magic.args || [],
             handler: controller[action]
@@ -115,16 +115,13 @@ exports.mount = function (name, controller) {
 
       if (!magic.method) {
         // Custom actions (i.e. not magic) needs its name without HTTP method added to the url:
-        var urlPart = stripUnwantedSlashes(getUrlPart(action));
-        if (urlPart) {
-          route.url.push(urlPart);
-        }
+        arrayAdd(route.url, getUrlPart(action));
       }
 
       // Is the action an array?
       if (Array.isArray(route.handler)) {
         if (route.handler.length > 1) {
-          // All preceeding elements in the array are url params/chunks/arguments e.g. ":id":
+          // All preceeding elements in the array are url params/chunks/arguments e.g. ':id':
           route.args = route.handler.splice(0, route.handler.length - 1);
         }
         // The last element in the array is the real handler:
@@ -132,7 +129,7 @@ exports.mount = function (name, controller) {
       }
 
       if (typeof route.handler !== 'function') {
-        throw new Error('Bad handler type for action: ' + name + ':' + action + ', expected: "function", but was: "' + typeof(route.handler) + '"');
+        throw new Error('Bad handler type for action: ' + name + ':' + action + ', expected: \'function\', but was: \'' + typeof(route.handler) + '\'');
       }
 
       // Add the url params/chunks/arguments to the route.url:
@@ -178,12 +175,12 @@ function arrayAdd (dest, src) {
  * Example 1:
  *  file: /var/tmp/super.controller.js
  *  extractorRegExp: /([^\/\\]+).controller.js$/
- *  Returns: "super"
+ *  Returns: 'super'
  *
  * Example 2:
  *  file: /var/tmp/controllers/super.js
  *  extractorRegExp: NULL
- *  Returns: "super"
+ *  Returns: 'super'
  *
  * @param {String} file
  * @param {RegExp} extractorRegExp
@@ -197,7 +194,7 @@ function getControllerName (file, extractorRegExp) {
 /**
  * Get an URL from an array of chunks
  *
- * Joins the chunks with "/" and prepends it as well
+ * Joins the chunks with '/' and prepends it as well
  *
  * @param {Array} urlChunks
  * @returns {String}
@@ -257,7 +254,7 @@ function stripUnwantedSlashes (url) {
  */
 function getMethod (action) {
   var method = action.split(/[^a-z]/)[0];
-  if (['post', 'head', 'get', 'delete', 'put'].indexOf(method) >= 0) {
+  if (['post', 'head', 'get', 'delete', 'put', 'trace', 'options'].indexOf(method) >= 0) {
     return method;
   }
   return null;
@@ -279,5 +276,11 @@ function getUrlPart (action) {
   if (method) {
     action = action.slice(method.length);
   }
-  return _.ltrim(_.dasherize(action), '-');
+  return stripUnwantedSlashes(action).split('/').filter(function (chunk) { return !!chunk; })
+    .map(function (chunk) {
+      if (chunk.indexOf(':') < 0) {
+        return _.ltrim(_.dasherize(chunk), '-');
+      }
+      return chunk;
+    });
 }

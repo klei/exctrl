@@ -286,6 +286,21 @@ describe('exctrl', function () {
       expect(mockApp.routes[0].url).to.equal('/user/close-friends');
       expect(mockApp.routes[1].url).to.equal('/user/friend');
     });
+
+    it('should handle camelized param names', function () {
+      var controller = {
+        name: 'user',
+        get: [':userId', function () {}],
+        "get/:userId/friends": function () {}
+      };
+      exctrl.bind(mockApp);
+      exctrl.mount(controller);
+      expect(mockApp.routes).to.have.length(2);
+      expect(mockApp.routes[0].method).to.equal('get');
+      expect(mockApp.routes[1].method).to.equal('get');
+      expect(mockApp.routes[0].url).to.equal('/user/:userId');
+      expect(mockApp.routes[1].url).to.equal('/user/:userId/friends');
+    });
   });
 
   describe('load', function () {
