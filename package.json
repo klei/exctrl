@@ -1,31 +1,31 @@
 {
   "name": "exctrl",
-  "version": "0.2.1",
+  "version": "0.3.0",
   "description": "Flexible controllers for express.js apps",
   "main": "index.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha -R spec tests"
+    "test": "mocha -R spec tests"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/klei-dev/exctrl"
+    "url": "https://github.com/klei/exctrl"
   },
   "keywords": [
     "controller",
     "express",
     "router"
   ],
-  "author": "Joakim Bengtson <joakim@klei.se>",
+  "author": "Joakim Carlstein <joakim@klei.se>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/klei-dev/exctrl/issues"
+    "url": "https://github.com/klei/exctrl/issues"
   },
   "devDependencies": {
-    "mocha": "~1.14.0",
-    "chai": "~1.8.1"
+    "chai": "^2.3.0",
+    "mocha": "^2.2.4"
   },
   "dependencies": {
-    "glob": "~3.2.7",
-    "underscore.string": "~2.3.3"
+    "glob": "^5.0.5",
+    "underscore.string": "^3.0.3"
   }
 }

@@ -254,7 +254,7 @@ function stripUnwantedSlashes (url) {
  */
 function getMethod (action) {
   var method = action.split(/[^a-z]/)[0];
-  if (['post', 'head', 'get', 'delete', 'put', 'trace', 'options'].indexOf(method) >= 0) {
+  if (['post', 'head', 'get', 'delete', 'put', 'trace', 'options', 'patch'].indexOf(method) >= 0) {
     return method;
   }
   return null;
